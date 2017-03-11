@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">Digital Collections</string>
+    <string name="action_search">Search</string>
+    <string name="action_bookmarks">Bookmarks</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="search_activity_title">Search</string>
+    <string name="title_activity_document_view">Document View</string>
+    <string name="doc_view_previous_button_label">&lt;</string>
+    <string name="doc_view_default_page_label">Page</string>
+    <string name="doc_view_next_button_label">&gt;</string>
+    <string name="network_error_message">Check your data connection!</string>
+    <string name="network_error_title">Network Error</string>
+    <string name="ok">OK</string>
+    <string name="title_activity_document_swipe_view">DocumentSwipeView</string>
+    <string name="action_detail_view_label">Details</string>
+    <string name="action_bookmark_label">Bookmark</string>
+    <string name="title_activity_document_detail_view">DocumentDetailViewActivity</string>
+    <string name="detail_view_title_label">Title:</string>
+    <string name="detail_view_origin_label">Place of Origin:</string>
+    <string name="detail_view_publisher_label">Publisher:</string>
+    <string name="detail_view_date_label">Date:</string>
+    <string name="detail_view_language_label">Language:</string>
+    <string name="detail_view_abstract_label">Abstract:</string>
+    <string name="detail_view_access_condition_label">Access Condition:</string>
+    <string name="no_suggestions">There are no suggestions for you at the moment!</string>
+    <string name="popular_tab_title">Popular</string>
+    <string name="suggested_tab_title">Suggested</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_bookmarks">BookmarksActivity</string>
+    <string name="action_delete_bookmark">Remove Bookmark</string>
+
+    <string name="dialog_add">Add to Collections</string>
+    <string name="cancel">Cancel</string>
+</resources>
