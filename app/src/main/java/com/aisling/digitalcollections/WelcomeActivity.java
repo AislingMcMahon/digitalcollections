@@ -66,20 +66,19 @@ public class WelcomeActivity extends AppCompatActivity {
                 String storedPassword = "";
 
                 // fetch the Password form database for respective user name
-                String query= "SELECT password FROM USERS WHERE email=\"" + userName + "\";";
-                Cursor c = db.rawQuery(query,null);
-
-                if(c.moveToFirst())
-                {
+                String query= "SELECT password FROM USERS WHERE email=?;";
+                Cursor c = db.rawQuery(query, new String[] {userName});
+                if(c.moveToFirst()){
                     storedPassword = c.getString(0);
                 }
 
-                //u = new User(userName,password);
+
+                u = new User(userName,password);
 
                 // check if the Stored password matches with  Password entered by user
                 if(password.equals(storedPassword))
                 {
-                    Toast.makeText(WelcomeActivity.this, "Congrats: Login Successfull", Toast.LENGTH_LONG).show();
+                    Toast.makeText(WelcomeActivity.this, "Congrats: Login Successful", Toast.LENGTH_LONG).show();
                     dialog.dismiss();
                     u.loggedIn=true;
                     Intent intentSignIn = new Intent(getApplicationContext(),MainActivity.class);

@@ -24,7 +24,8 @@ public class Register extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         // get Instance  of Database Adapter
-        mDbHelper=new DigitalCollectionsDbHelper(this);
+        mDbHelper=new DigitalCollectionsDbHelper(Register.this);
+
 
 
         // Get Refferences of Views
@@ -64,6 +65,7 @@ public class Register extends AppCompatActivity {
                     ContentValues values = new ContentValues();
                     values.put(DigitalCollectionsContract.CollectionUsers.COLUMN_NAME_EMAIL,userName);
                     values.put(DigitalCollectionsContract.CollectionUsers.COLUMN_NAME_PASSWORD,password);
+                    db.insert(DigitalCollectionsContract.CollectionUsers.TABLE_NAME,null,values);
                     Toast.makeText(getApplicationContext(), "Account Successfully Created ", Toast.LENGTH_LONG).show();
                     Intent myIntent = new Intent(Register.this, MainActivity.class);
                     startActivity(myIntent);
