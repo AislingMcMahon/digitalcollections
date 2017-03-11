@@ -55,8 +55,8 @@ public class Register extends AppCompatActivity {
                 else
                 {
                     // Save the Data in Database
-                    loginDataBaseAdapter.insertEntry(userName, password);
                     WelcomeActivity.u = new User(userName,password);
+                    loginDataBaseAdapter.insertEntry(WelcomeActivity.u);
                     Toast.makeText(getApplicationContext(), "Account Successfully Created ", Toast.LENGTH_LONG).show();
                     Intent myIntent = new Intent(Register.this, MainActivity.class);
                     startActivity(myIntent);
