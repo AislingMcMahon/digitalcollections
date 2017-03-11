@@ -2,6 +2,8 @@ package com.aisling.digitalcollections;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,7 +14,7 @@ import android.widget.Toast;
 public class WelcomeActivity extends AppCompatActivity {
 
     Button btnSignIn,btnSignUp;
-    LoginDataBaseAdapter loginDataBaseAdapter;
+    DigitalCollectionsDbHelper mDbHelper;
     public static User u;
 
     @Override
@@ -22,8 +24,7 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
 
         // create a instance of SQLite Database
-        loginDataBaseAdapter=new LoginDataBaseAdapter(this);
-        loginDataBaseAdapter=loginDataBaseAdapter.open();
+        mDbHelper = new DigitalCollectionsDbHelper(WelcomeActivity.this);
 
         // Get The Refference Of Buttons
         btnSignIn=(Button)findViewById(R.id.buttonSignIN);
@@ -47,6 +48,8 @@ public class WelcomeActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.activity_login);
         dialog.setTitle("Login");
 
+        final SQLiteDatabase db;
+        db = mDbHelper.getReadableDatabase();
         // get the References of views
         final  EditText editTextUserName=(EditText)dialog.findViewById(R.id.editTextUserNameToLogin);
         final  EditText editTextPassword=(EditText)dialog.findViewById(R.id.editTextPasswordToLogin);
@@ -60,10 +63,18 @@ public class WelcomeActivity extends AppCompatActivity {
                 // get The User name and Password
                 String userName=editTextUserName.getText().toString();
                 String password=editTextPassword.getText().toString();
+                String storedPassword = "";
 
                 // fetch the Password form database for respective user name
-                String storedPassword=loginDataBaseAdapter.getSinlgeEntry(userName);
-                u = new User(userName,password);
+                String query= "SELECT password FROM USERS WHERE email=\"" + userName + "\";";
+                Cursor c = db.rawQuery(query,null);
+
+                if(c.moveToFirst())
+                {
+                    storedPassword = c.getString(0);
+                }
+
+                //u = new User(userName,password);
 
                 // check if the Stored password matches with  Password entered by user
                 if(password.equals(storedPassword))
@@ -88,7 +99,7 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         // Close The Database
-        loginDataBaseAdapter.close();
+        mDbHelper.close();
     }
 }
 
