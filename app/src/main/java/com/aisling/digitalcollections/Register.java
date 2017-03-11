@@ -1,7 +1,9 @@
 package com.aisling.digitalcollections;
 
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -14,7 +16,7 @@ public class Register extends AppCompatActivity {
     EditText editTextUserName,editTextPassword,editTextConfirmPassword;
     Button btnCreateAccount;
 
-    LoginDataBaseAdapter loginDataBaseAdapter;
+    DigitalCollectionsDbHelper mDbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -22,8 +24,8 @@ public class Register extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         // get Instance  of Database Adapter
-        loginDataBaseAdapter=new LoginDataBaseAdapter(this);
-        loginDataBaseAdapter=loginDataBaseAdapter.open();
+        mDbHelper=new DigitalCollectionsDbHelper(this);
+
 
         // Get Refferences of Views
         editTextUserName=(EditText)findViewById(R.id.editTextUserName);
@@ -35,6 +37,9 @@ public class Register extends AppCompatActivity {
 
             public void onClick(View v) {
                 // TODO Auto-generated method stub
+
+                SQLiteDatabase db;
+                db = mDbHelper.getWritableDatabase();
 
                 String userName=editTextUserName.getText().toString();
                 String password=editTextPassword.getText().toString();
@@ -55,8 +60,10 @@ public class Register extends AppCompatActivity {
                 else
                 {
                     // Save the Data in Database
-                    WelcomeActivity.u = new User(userName,password);
-                    loginDataBaseAdapter.insertEntry(WelcomeActivity.u);
+                    //WelcomeActivity.u = new User(userName,password);
+                    ContentValues values = new ContentValues();
+                    values.put(DigitalCollectionsContract.CollectionUsers.COLUMN_NAME_EMAIL,userName);
+                    values.put(DigitalCollectionsContract.CollectionUsers.COLUMN_NAME_PASSWORD,password);
                     Toast.makeText(getApplicationContext(), "Account Successfully Created ", Toast.LENGTH_LONG).show();
                     Intent myIntent = new Intent(Register.this, MainActivity.class);
                     startActivity(myIntent);
@@ -69,6 +76,6 @@ public class Register extends AppCompatActivity {
         // TODO Auto-generated method stub
         super.onDestroy();
 
-        loginDataBaseAdapter.close();
+        mDbHelper.close();
     }
 }
