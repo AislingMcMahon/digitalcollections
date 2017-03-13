@@ -51,8 +51,8 @@ public class PopularFragment extends Fragment {
 
         /*GetSearchResults getSearchResults = new GetSearchResults();
         getSearchResults.execute("cork");*/
-        GetPopularDocuments getPopularDocuments = new GetPopularDocuments();
-        getPopularDocuments.execute();
+        /*GetPopularDocuments getPopularDocuments = new GetPopularDocuments();
+        getPopularDocuments.execute();*/
         return rootView;
     }
 

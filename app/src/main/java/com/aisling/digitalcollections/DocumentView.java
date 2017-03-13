@@ -1,6 +1,6 @@
 package com.aisling.digitalcollections;
 
-import android.app.DialogFragment;
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,11 +13,13 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
@@ -51,7 +53,6 @@ public class DocumentView extends AppCompatActivity {
     private TextView mSeekBarTextView;
     private int currentPageIndex;
     boolean navBarVisible = true;
-    private Document doc;
     private User u = WelcomeActivity.u;
 
     @Override
@@ -471,13 +472,94 @@ public class DocumentView extends AppCompatActivity {
                 startDetailViewActivity();
                 return true;
             case R.id.action_bookmark:
-                DialogFragment dialogFragment = new CollectionsDialog();
-                dialogFragment.show(getFragmentManager(),"collections");
-                BookmarkDocTask bookmarkDocTask = new BookmarkDocTask();
-                bookmarkDocTask.execute();
+                final ArrayList<Integer> mSelectedItems = new ArrayList();
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(DocumentView.this);
+                LayoutInflater inflater = DocumentView.this.getLayoutInflater();
+                builder.setView(inflater.inflate(R.layout.collection_dialog,null));
+                if(!u.folders.isEmpty()){
+                    builder.setTitle(R.string.dialog_add)
+                            .setMultiChoiceItems(u.getFolderNames(),null, new DialogInterface.OnMultiChoiceClickListener() {
+                                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                    if(isChecked)
+                                    {
+                                        mSelectedItems.add(which);
+                                    }
+
+                                }
+                            })
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener(){
+                                public void onClick(DialogInterface dialog,int id){
+                                    clear(u.selectedFolders);
+                                    for(int i : mSelectedItems)
+                                    {
+                                        u.selectedFolders[i] = true;
+                                        BookmarkDocTask bookmarkDocTask = new BookmarkDocTask();
+                                        bookmarkDocTask.execute();
+                                    }
+                                }
+                            })
+                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // User cancelled the dialog
+                                    clear(u.selectedFolders);
+
+
+                                }
+                            });
+
+                }
+                else
+                {
+                    builder.setTitle(R.string.dialog_add)
+                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // User cancelled the dialog
+                                    clear(u.selectedFolders);
+
+
+                                }
+                            });
+                }
+                final Dialog d = builder.create();
+                d.show();
+                Button addBtn = (Button) d.findViewById(R.id.addButton);
+                addBtn.setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View v) {
+                        d.dismiss();
+                        final Dialog dialog = new Dialog(DocumentView.this);
+                        dialog.setContentView(R.layout.add_dialog);
+                        dialog.setTitle("New Folder");
+                        dialog.show();
+                        Button btnOk = (Button) dialog.findViewById(R.id.dialog_ok);
+                        btnOk.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                EditText edit = (EditText)dialog.findViewById(R.id.dialog_edit);
+                                String folderName = edit.getText().toString();
+                                Folder newFolder = new Folder(folderName);
+                                u.addToCollection(newFolder);
+                                u.selectedFolders[u.folders.size()-1] = true;
+                                addFolderToDatabase(newFolder);
+                                BookmarkDocTask bookmarkDocTask = new BookmarkDocTask();
+                                bookmarkDocTask.execute();
+                                dialog.dismiss();
+                            }
+                        });
+
+
+                    }
+                });
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void clear(boolean[] array)
+    {
+        for(int i=0;i<array.length;i++)
+        {
+            array[i] = false;
+        }
     }
 
     private void startDetailViewActivity(){
@@ -542,8 +624,8 @@ public class DocumentView extends AppCompatActivity {
     private boolean addToFolders()
     {
         boolean result = false;
-        doc = new Document(docInfo[0],docInfo[1],docInfo[3],docInfo[2]);
         ArrayList<Folder> folders = u.folders;
+        String doc = docInfo[0];
         for(int i=0;i<u.selectedFolders.length;i++)
         {
             if(u.selectedFolders[i])
@@ -559,7 +641,7 @@ public class DocumentView extends AppCompatActivity {
         return result;
     }
 
-    private void addToDatabase(Document doc, Folder f)
+    private void addToDatabase(String doc, Folder f)
     {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         if(!inBookmarks(doc))
@@ -573,20 +655,20 @@ public class DocumentView extends AppCompatActivity {
         }
         else{
             ContentValues values = new ContentValues();
-            values.put(DigitalCollectionsContract.CollectionContains.COLUMN_NAME_DOC_ID, doc.getPid());
+            values.put(DigitalCollectionsContract.CollectionContains.COLUMN_NAME_DOC_ID, doc);
             values.put(DigitalCollectionsContract.CollectionContains.COLUMN_NAME_FOLDER_ID, f.getFolderName());
             db.insert(DigitalCollectionsContract.CollectionContains.TABLE_NAME,null,values);
         }
     }
 
-    private  boolean inBookmarks(Document doc)
+    private  boolean inBookmarks(String doc)
     {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         String[] projection = {DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_PID};
         String selection = DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_PID;
         String[] selectionVals = {docInfo[0]};
         String sortOrder = DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_TIME + " DESC";
-        String query = "SELECT pid FROM bookmark WHERE pid=\"" + docInfo[0] + "\" ORDER BY time DESC";
+        String query = "SELECT pid FROM bookmark WHERE pid=\"" + doc + "\" ORDER BY time DESC";
 
         Cursor c = db.rawQuery(query, null);
 
@@ -596,6 +678,15 @@ public class DocumentView extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    private void addFolderToDatabase(Folder f)
+    {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DigitalCollectionsContract.CollectionFolders.COLUMN_NAME_FOLDER_NAME, f.getFolderName());
+        values.put(DigitalCollectionsContract.CollectionFolders.COLUMN_NAME_USER_ID, u.getUserName());
+        db.insert(DigitalCollectionsContract.CollectionFolders.TABLE_NAME,null,values);
     }
 }
 

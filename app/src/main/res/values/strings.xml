@@ -35,4 +35,5 @@
 
     <string name="dialog_add">Add to Collections</string>
     <string name="cancel">Cancel</string>
+    <string name="dialog_add_folder">New Folder</string>
 </resources>

@@ -61,7 +61,7 @@ public class Register extends AppCompatActivity {
                 else
                 {
                     // Save the Data in Database
-                    //WelcomeActivity.u = new User(userName,password);
+                    WelcomeActivity.u = new User(userName,password);
                     ContentValues values = new ContentValues();
                     values.put(DigitalCollectionsContract.CollectionUsers.COLUMN_NAME_EMAIL,userName);
                     values.put(DigitalCollectionsContract.CollectionUsers.COLUMN_NAME_PASSWORD,password);

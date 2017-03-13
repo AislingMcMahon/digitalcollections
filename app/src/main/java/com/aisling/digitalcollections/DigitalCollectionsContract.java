@@ -70,7 +70,7 @@ public final class DigitalCollectionsContract {
             DROP_TABLE + CollectionBookmark.TABLE_NAME;
 
     /**
-     * Created by Aisling on 03/03/2017.
+     * Created by Ais on 03/03/2017.
      */
     public static abstract class CollectionUsers implements BaseColumns{
         public static final String TABLE_NAME = "users";

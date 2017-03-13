@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -73,18 +74,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
 
                 u = new User(userName,password);
-
-                //load the folder names into this user
-                query = "SELECT folder_name FROM FOLDERS WHERE user_id=?";
-                c = db.rawQuery(query, new String[] {userName});
-                if(c.moveToFirst())
-                {
-                    int i =0;
-                    do{
-                        u.folderNames[i] = c.getString(i);
-                        i++;
-                    }while(c.moveToNext());
-                }
+                initialiseUser(u); //initialise this User from the DB
 
                 // check if the Stored password matches with  Password entered by user
                 if(password.equals(storedPassword))
@@ -110,6 +100,36 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onDestroy();
         // Close The Database
         mDbHelper.close();
+    }
+
+    public void initialiseUser(User u)
+    {
+        final SQLiteDatabase db;
+        db = mDbHelper.getReadableDatabase();
+        //load the folder names into this user
+        String query = "SELECT folder_name FROM FOLDERS WHERE user_id=?";
+        Cursor c = db.rawQuery(query, new String[] {u.getUserName()});
+        if(c.moveToFirst())
+        {
+            do {
+                u.folderNames.add(c.getString(0));
+                Folder newF = new Folder(c.getString(0));
+                u.folders.add(newF);
+                Log.d(u.folderNames.get(0), "folder name");
+            }while(c.moveToNext());
+        }
+
+        //load documents into folders
+        for(Folder f : u.folders)
+        {
+            String query2 = "SELECT document_id FROM CONTAINS WHERE folder_id=?";
+            Cursor c2 = db.rawQuery(query2, new String[]{f.getFolderName()});
+            if(c2.moveToFirst()){
+                do{
+                    f.addToFolder(c2.getString(0));
+                }while (c2.moveToNext());
+            }
+        }
     }
 }
 
