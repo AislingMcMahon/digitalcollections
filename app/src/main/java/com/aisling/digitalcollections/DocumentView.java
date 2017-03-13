@@ -51,6 +51,8 @@ public class DocumentView extends AppCompatActivity {
     private TextView mSeekBarTextView;
     private int currentPageIndex;
     boolean navBarVisible = true;
+    private Document doc;
+    private User u = WelcomeActivity.u;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +94,7 @@ public class DocumentView extends AppCompatActivity {
         // Get metadata for document
         GetDocumentMetadata getDocumentMetadata = new GetDocumentMetadata();
         getDocumentMetadata.execute(docInfo[0]);
+
 
     }
 
@@ -468,10 +471,10 @@ public class DocumentView extends AppCompatActivity {
                 startDetailViewActivity();
                 return true;
             case R.id.action_bookmark:
-                //BookmarkDocTask bookmarkDocTask = new BookmarkDocTask();
-                //bookmarkDocTask.execute();
                 DialogFragment dialogFragment = new CollectionsDialog();
                 dialogFragment.show(getFragmentManager(),"collections");
+                BookmarkDocTask bookmarkDocTask = new BookmarkDocTask();
+                bookmarkDocTask.execute();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -490,7 +493,7 @@ public class DocumentView extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            return bookmarkDoc();
+            return addToFolders();
         }
 
         @Override
@@ -498,12 +501,12 @@ public class DocumentView extends AppCompatActivity {
             if(bookmarked){
                 Toast.makeText(DocumentView.this, "Bookmark Added!", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(DocumentView.this, "This item has already been bookmarked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DocumentView.this, "Document already in selected folders", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private boolean bookmarkDoc(){
+    /*private boolean bookmarkDoc(){
 
         while (documentMetadata ==  null){}
 
@@ -534,6 +537,65 @@ public class DocumentView extends AppCompatActivity {
             long newRowId = db.insert(DigitalCollectionsContract.CollectionBookmark.TABLE_NAME, null, values);
             return true;
         }
+    }*/
+
+    private boolean addToFolders()
+    {
+        boolean result = false;
+        doc = new Document(docInfo[0],docInfo[1],docInfo[3],docInfo[2]);
+        ArrayList<Folder> folders = u.folders;
+        for(int i=0;i<u.selectedFolders.length;i++)
+        {
+            if(u.selectedFolders[i])
+            {
+                if(!folders.get(i).contains(doc))
+                {
+                    folders.get(i).addToFolder(doc);
+                    addToDatabase(doc,folders.get(i));
+                    result = true;
+                }
+            }
+        }
+        return result;
     }
 
+    private void addToDatabase(Document doc, Folder f)
+    {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        if(!inBookmarks(doc))
+        {
+            ContentValues values = new ContentValues();
+            values.put(DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_PID, docInfo[0]);
+            values.put(DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_FOLDER_NUMBER, docInfo[1]);
+            values.put(DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_TITLE, (String) documentMetadata.get(0));
+            values.put(DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_GENRE, docInfo[3]);
+            long newRowId = db.insert(DigitalCollectionsContract.CollectionBookmark.TABLE_NAME, null, values);
+        }
+        else{
+            ContentValues values = new ContentValues();
+            values.put(DigitalCollectionsContract.CollectionContains.COLUMN_NAME_DOC_ID, doc.getPid());
+            values.put(DigitalCollectionsContract.CollectionContains.COLUMN_NAME_FOLDER_ID, f.getFolderName());
+            db.insert(DigitalCollectionsContract.CollectionContains.TABLE_NAME,null,values);
+        }
+    }
+
+    private  boolean inBookmarks(Document doc)
+    {
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        String[] projection = {DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_PID};
+        String selection = DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_PID;
+        String[] selectionVals = {docInfo[0]};
+        String sortOrder = DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_TIME + " DESC";
+        String query = "SELECT pid FROM bookmark WHERE pid=\"" + docInfo[0] + "\" ORDER BY time DESC";
+
+        Cursor c = db.rawQuery(query, null);
+
+        int index = c.getColumnIndex(DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_PID);
+
+        if(c.moveToNext()){
+            return true;
+        }
+        return false;
+    }
 }
+

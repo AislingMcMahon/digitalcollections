@@ -8,12 +8,12 @@ import java.util.ArrayList;
 
 public class Folder {
 
-    private ArrayList<String> urls;
+    private ArrayList<Document> docs;
     private String name;
 
     public Folder(String name)
     {
-        this.urls = new ArrayList<String>();
+        this.docs = new ArrayList<Document>();
         this.name = name;
     }
 
@@ -22,9 +22,13 @@ public class Folder {
         return this.name;
     }
 
-    public void addToFolder(String url)
+    public void addToFolder(Document doc)
     {
-        urls.add(url);
+        docs.add(doc);
+    }
+
+    public boolean contains(Document doc){
+        return docs.contains(doc);
     }
 
 }

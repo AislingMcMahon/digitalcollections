@@ -25,7 +25,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
         // create a instance of SQLite Database
         mDbHelper = new DigitalCollectionsDbHelper(WelcomeActivity.this);
-
         // Get The Refference Of Buttons
         btnSignIn=(Button)findViewById(R.id.buttonSignIN);
         btnSignUp=(Button)findViewById(R.id.buttonSignUP);
@@ -74,6 +73,18 @@ public class WelcomeActivity extends AppCompatActivity {
 
 
                 u = new User(userName,password);
+
+                //load the folder names into this user
+                query = "SELECT folder_name FROM FOLDERS WHERE user_id=?";
+                c = db.rawQuery(query, new String[] {userName});
+                if(c.moveToFirst())
+                {
+                    int i =0;
+                    do{
+                        u.folderNames[i] = c.getString(i);
+                        i++;
+                    }while(c.moveToNext());
+                }
 
                 // check if the Stored password matches with  Password entered by user
                 if(password.equals(storedPassword))

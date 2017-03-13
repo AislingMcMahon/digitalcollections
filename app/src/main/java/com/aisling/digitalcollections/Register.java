@@ -28,7 +28,7 @@ public class Register extends AppCompatActivity {
 
 
 
-        // Get Refferences of Views
+        // Get References of Views
         editTextUserName=(EditText)findViewById(R.id.editTextUserName);
         editTextPassword=(EditText)findViewById(R.id.editTextPassword);
         editTextConfirmPassword=(EditText)findViewById(R.id.editTextConfirmPassword);
