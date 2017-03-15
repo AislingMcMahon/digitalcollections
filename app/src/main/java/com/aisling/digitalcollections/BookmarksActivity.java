@@ -65,7 +65,7 @@ public class BookmarksActivity extends AppCompatActivity {
             }
         });
 
-        mDbHelper = new DigitalCollectionsDbHelper(BookmarksActivity.this);
+        mDbHelper = DigitalCollectionsDbHelper.getInstance(BookmarksActivity.this);
         mProgressBar = (ProgressBar) findViewById(R.id.bookmarkProgressBar);
         mProgressBar.setVisibility(View.INVISIBLE);
         GetBookmarksTask getBookmarksTask = new GetBookmarksTask();
@@ -80,7 +80,6 @@ public class BookmarksActivity extends AppCompatActivity {
                 DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_PID + " = ?",
                 new String[]{bookmarks.get(position).getPid()}
         );
-        db.close();
         // Delete from list
         bookmarks.remove(position);
         adapter.notifyDataSetChanged();
@@ -135,8 +134,6 @@ public class BookmarksActivity extends AppCompatActivity {
         }
 
         c.close();
-        db.close();
-
         return bookmarks;
     }
 
@@ -165,5 +162,13 @@ public class BookmarksActivity extends AppCompatActivity {
         documentViewIntent.putExtra(AppConstants.documentTransferString, bookmarks.get(listPosition).toArray());
         startActivity(documentViewIntent);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Close The Database
+        mDbHelper.close();
+    }
+
 
 }

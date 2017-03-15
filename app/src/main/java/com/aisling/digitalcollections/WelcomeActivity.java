@@ -25,7 +25,7 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
 
         // create a instance of SQLite Database
-        mDbHelper = new DigitalCollectionsDbHelper(WelcomeActivity.this);
+        mDbHelper = DigitalCollectionsDbHelper.getInstance((WelcomeActivity.this));
         // Get The Refference Of Buttons
         btnSignIn=(Button)findViewById(R.id.buttonSignIN);
         btnSignUp=(Button)findViewById(R.id.buttonSignUP);
@@ -41,7 +41,7 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
     }
-    // Methos to handleClick Event of Sign In Button
+    // Method to handleClick Event of Sign In Button
     public void signIn(View V)
     {
         final Dialog dialog = new Dialog(WelcomeActivity.this);
@@ -71,7 +71,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 if(c.moveToFirst()){
                     storedPassword = c.getString(0);
                 }
-
+                c.close();
 
                 u = new User(userName,password);
                 initialiseUser(u); //initialise this User from the DB
@@ -118,7 +118,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 Log.d(u.folderNames.get(0), "folder name");
             }while(c.moveToNext());
         }
-
+        c.close();
         //load documents into folders
         for(Folder f : u.folders)
         {
@@ -129,7 +129,12 @@ public class WelcomeActivity extends AppCompatActivity {
                     f.addToFolder(c2.getString(0));
                 }while (c2.moveToNext());
             }
+            c2.close();
         }
+
+        //
+        u.selectedFolders = new boolean[u.folders.size()];
+        db.close();
     }
 }
 

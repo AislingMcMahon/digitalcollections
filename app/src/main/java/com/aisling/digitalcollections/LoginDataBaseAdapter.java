@@ -28,7 +28,7 @@ public class LoginDataBaseAdapter {
     public  LoginDataBaseAdapter(Context _context)
     {
         context = _context;
-        dbHelper = new DigitalCollectionsDbHelper(context);
+        dbHelper = DigitalCollectionsDbHelper.getInstance(context);
     }
     public  LoginDataBaseAdapter open() throws SQLException
     {

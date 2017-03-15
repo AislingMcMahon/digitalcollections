@@ -112,11 +112,11 @@ public final class DigitalCollectionsContract {
     public static final String SQL_CREATE_CONTAINS =
             CREATE_TABLE + CollectionContains.TABLE_NAME + OPENING_PAREN +
             CollectionContains.COLUMN_NAME_DOC_ID + INTEGER_TYPE + COMMA_SEP+
-            CollectionContains.COLUMN_NAME_FOLDER_ID + INTEGER_TYPE + COMMA_SEP +
+            CollectionContains.COLUMN_NAME_FOLDER_ID + TEXT_TYPE + COMMA_SEP +
             FOREIGN_KEY_CONSTRAINT + OPENING_PAREN + CollectionContains.COLUMN_NAME_DOC_ID + CLOSING_PAREN +
                     REFERENCES + CollectionBookmark.TABLE_NAME + OPENING_PAREN + CollectionBookmark._ID + CLOSING_PAREN + COMMA_SEP+
             FOREIGN_KEY_CONSTRAINT + OPENING_PAREN + CollectionContains.COLUMN_NAME_FOLDER_ID + CLOSING_PAREN +
-                    REFERENCES + CollectionFolders.TABLE_NAME + OPENING_PAREN + CollectionFolders._ID + CLOSING_PAREN + COMMA_SEP +
+                    REFERENCES + CollectionFolders.TABLE_NAME + OPENING_PAREN + CollectionFolders.COLUMN_NAME_FOLDER_NAME + CLOSING_PAREN + COMMA_SEP +
                     PRIMARY_KEY_CONSTRAINT + OPENING_PAREN + CollectionContains.COLUMN_NAME_FOLDER_ID + COMMA_SEP + CollectionContains.COLUMN_NAME_DOC_ID + CLOSING_PAREN
                     + CLOSING_PAREN;
 

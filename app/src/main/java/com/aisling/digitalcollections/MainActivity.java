@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startBookmarksActivity() {
-        Intent searchIntent = new Intent(this, BookmarksActivity.class);
+        Intent searchIntent = new Intent(this, FoldersActivity.class);
         startActivity(searchIntent);
     }
 

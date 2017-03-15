@@ -6,6 +6,7 @@ package com.aisling.digitalcollections;
 public class AppConstants {
     //Strings
     public static final String documentTransferString = "document";
+    public static final String folderTransferString = "folder";
     public static final int documentImageWidth = 1500;
     public static final int documentImageHeight = 1500;
     public static final int thumbnailImageWidth = 100;
@@ -21,4 +22,5 @@ public class AppConstants {
     public static int numberOfSearchesForSuggestions = 5;
     public static int resultsPerSuggestion = 4;
     public static String BookmarksActivityTitle = "Bookmarks";
+    public static String FoldersActivityTitle = "Folders";
 }

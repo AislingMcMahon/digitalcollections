@@ -80,7 +80,7 @@ public class DocumentView extends AppCompatActivity {
         mSeekBarTextView = (TextView) findViewById((R.id.seekBarTextView));
         mTitleTextView = (TextView) findViewById(R.id.docViewTitleTextView);
 
-        mDbHelper = new DigitalCollectionsDbHelper(DocumentView.this);
+        mDbHelper = DigitalCollectionsDbHelper.getInstance(DocumentView.this);
 
         initializeDocImage();
 
@@ -490,12 +490,12 @@ public class DocumentView extends AppCompatActivity {
                             .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener(){
                                 public void onClick(DialogInterface dialog,int id){
                                     clear(u.selectedFolders);
-                                    for(int i : mSelectedItems)
+                                    for(int i:mSelectedItems)
                                     {
                                         u.selectedFolders[i] = true;
-                                        BookmarkDocTask bookmarkDocTask = new BookmarkDocTask();
-                                        bookmarkDocTask.execute();
                                     }
+                                    BookmarkDocTask bookmarkDocTask = new BookmarkDocTask();
+                                    bookmarkDocTask.execute();
                                 }
                             })
                             .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -630,10 +630,11 @@ public class DocumentView extends AppCompatActivity {
         {
             if(u.selectedFolders[i])
             {
-                if(!folders.get(i).contains(doc))
+                Folder f = folders.get(i);
+                if(!f.contains(doc))
                 {
-                    folders.get(i).addToFolder(doc);
-                    addToDatabase(doc,folders.get(i));
+                    f.addToFolder(doc);
+                    addToDatabase(doc,f);
                     result = true;
                 }
             }

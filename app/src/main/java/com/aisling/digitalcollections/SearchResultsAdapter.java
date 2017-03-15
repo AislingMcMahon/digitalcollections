@@ -49,7 +49,7 @@ public class SearchResultsAdapter extends ArrayAdapter<Document> {
         if (mBackground == AppConstants.backGroundLight) {
             mImageView.setImageBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.background_place_holder_image_light));
         }
-        else if (mBackground == AppConstants.backGroundLight){
+        else if (mBackground == AppConstants.backgroundDark){
             mImageView.setImageBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.background_place_holder_image_dark));
         }
         //Unique tag is added to each image to be checked again when adding the image in the thumbnail request

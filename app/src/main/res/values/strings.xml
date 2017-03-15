@@ -33,6 +33,8 @@
     <string name="title_activity_bookmarks">BookmarksActivity</string>
     <string name="action_delete_bookmark">Remove Bookmark</string>
 
+    <string name="action_delete_folder">Delete folder</string>
+
     <string name="dialog_add">Add to Collections</string>
     <string name="cancel">Cancel</string>
     <string name="dialog_add_folder">New Folder</string>

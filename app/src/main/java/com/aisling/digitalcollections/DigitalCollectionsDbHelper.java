@@ -14,9 +14,19 @@ public class DigitalCollectionsDbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "DigitalCollections.db";
+    private static DigitalCollectionsDbHelper mInstance = null;
 
-    public DigitalCollectionsDbHelper(Context context) {
+    private DigitalCollectionsDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    public static DigitalCollectionsDbHelper getInstance(Context context)
+    {
+        if(mInstance == null)
+        {
+            mInstance = new DigitalCollectionsDbHelper(context.getApplicationContext());
+        }
+        return mInstance;
     }
 
     @Override

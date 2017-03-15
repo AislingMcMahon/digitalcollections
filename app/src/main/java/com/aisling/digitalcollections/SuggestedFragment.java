@@ -43,7 +43,7 @@ public class SuggestedFragment extends Fragment {
         // Initialize Query constructor
         queryManager = new QueryManager();
         // Initialize dbManager
-        mDbHelper = new DigitalCollectionsDbHelper(getContext());
+        mDbHelper = DigitalCollectionsDbHelper.getInstance(getContext());
         //Add alert dialogue builder
         builder = new AlertDialog.Builder(getContext());
         // Initialize GridView

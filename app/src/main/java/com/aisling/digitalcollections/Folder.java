@@ -31,4 +31,19 @@ public class Folder {
         return docs.contains(doc);
     }
 
+    public String getFirstElement()
+    {
+        return this.docs.get(0);
+    }
+
+    public String[] toArray()
+    {
+        String[] folderArray =  {this.name};
+        return folderArray;
+    }
+
+    public boolean isEmpty(){
+        return this.docs.isEmpty();
+    }
+
 }

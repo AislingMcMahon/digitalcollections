@@ -61,7 +61,7 @@ public class SearchActivity extends AppCompatActivity {
         // Initialize Query constructor
         queryManager = new QueryManager();
         // Initialize dbManager
-        mDbHelper = new DigitalCollectionsDbHelper(SearchActivity.this);
+        mDbHelper = DigitalCollectionsDbHelper.getInstance(SearchActivity.this);
         // Initialize response XML parser
         responseXMLParser = new ResponseXMLParser();
         //InitializeListView
