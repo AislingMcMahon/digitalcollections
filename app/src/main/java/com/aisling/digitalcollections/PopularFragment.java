@@ -2,6 +2,8 @@ package com.aisling.digitalcollections;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -19,26 +24,32 @@ import java.util.List;
 
 public class PopularFragment extends Fragment {
 
-    private final String TAG = PopularFragment.class.getSimpleName();
+    private final String TAG = SuggestedFragment.class.getSimpleName();
 
-    private GridView mGridView;
     private QueryManager queryManager;
-    private List<Document> documentsRetrieved;
-    private AlertDialog.Builder builder;
-    private SearchResultsAdapter adapter;
-    private ResponseJSONParser responseJSONParser;
+    private DigitalCollectionsDbHelper mDbHelper;
+    private GridView mGridView;
     private ProgressBar mProgressBar;
+    private TextView mTextView;
+    private SearchResultsAdapter adapter;
+    private List<Document> documentsRetrieved;
+    private User u = WelcomeActivity.u;
+    private AlertDialog.Builder builder;
+    private ResponseXMLParser responseXMLParser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_popular, container, false);
-
-        responseJSONParser = new ResponseJSONParser();
+        View rootView = inflater.inflate(R.layout.fragment_suggested, container, false);
+        // Initialize Query constructor
         queryManager = new QueryManager();
+        // Initialize dbManager
+        mDbHelper = DigitalCollectionsDbHelper.getInstance(getContext());
+        //Add alert dialogue builder
         builder = new AlertDialog.Builder(getContext());
-
-        mGridView = (GridView) rootView.findViewById(R.id.popularGridView);
+        // Initialize GridView
+        mGridView = (GridView) rootView.findViewById(R.id.suggestedGridView);
+        mGridView.setVisibility(View.INVISIBLE);
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
@@ -46,40 +57,122 @@ public class PopularFragment extends Fragment {
             }
         });
 
-        mProgressBar = (ProgressBar) rootView.findViewById(R.id.popularProgressBar);
+        responseXMLParser = new ResponseXMLParser();
+
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.suggestedProgressBar);
         mProgressBar.setVisibility(View.INVISIBLE);
 
-        /*GetSearchResults getSearchResults = new GetSearchResults();
-        getSearchResults.execute("cork");*/
-        /*GetPopularDocuments getPopularDocuments = new GetPopularDocuments();
-        getPopularDocuments.execute();*/
+        mTextView = (TextView) rootView.findViewById(R.id.suggestedTextView);
+        mTextView.setVisibility(View.INVISIBLE);
+
+        documentsRetrieved = new ArrayList<>();
+        adapter = new SearchResultsAdapter(getContext(), documentsRetrieved, R.layout.item_grid_element, 1, AppConstants.backgroundDark);
+        mGridView.setAdapter(adapter);
+
+        GetSuggestedQueries getSuggestedQueries = new GetSuggestedQueries();
+        getSuggestedQueries.execute();
+
         return rootView;
     }
 
+    private List<String> getPreviousQueries() {
+        SQLiteDatabase db;// Read out database
+        db = mDbHelper.getReadableDatabase();
+        String sortOrder = DigitalCollectionsContract.CollectionQuery.COLUMN_NAME_TIME + " DESC";
+        Cursor c = db.query(
+                DigitalCollectionsContract.CollectionQuery.TABLE_NAME,  // The table to query
+                null,                                                   // The columns to return
+                null,  // The columns for the WHERE clause
+                null,                                // The values for the WHERE clause
+                null,                                                   // don't group the rows
+                null,                                                   // don't filter by row groups
+                sortOrder                                               // The sort order
+        );
+        int index = c.getColumnIndex(DigitalCollectionsContract.CollectionQuery.COLUMN_NAME_TEXT);
+
+        int retrievedQueries = 0;
+        List<String> previousQueries = new ArrayList<String>();
+        while(c.moveToNext() && retrievedQueries < AppConstants.numberOfSearchesForSuggestions) {
+            String query =  c.getString(index);
+            if(!previousQueries.contains(query)){
+                previousQueries.add(query);
+                retrievedQueries ++;
+            }
+        }
+        c.close();
+        db.close();
+        return previousQueries;
+    }
+
+    private class GetSuggestedQueries extends AsyncTask<Void, Void, List<String>> {
+
+        @Override
+        protected List<String> doInBackground(Void... params) {
+            return getPreviousQueries();
+        }
+
+        @Override
+        protected void onPreExecute(){
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(List<String> result){
+            if(result.isEmpty()){
+                mProgressBar.setVisibility(View.INVISIBLE);
+                mTextView.setVisibility(View.VISIBLE);
+            }
+            else {
+                for (String s : result) {
+                    new GetSuggestedResults().execute(s);
+                }
+            }
+        }
+    }
+
     // Creates an asynchronous task that gets the queries fedora for the results to the search
-    private class GetPopularDocuments extends AsyncTask<Void, Void, ArrayList<String[]>> {
+    private class GetSuggestedResults extends AsyncTask<String, Integer, List<Document>> {
 
+        // Append to list and query Id will be used if a paging request is being made
+        boolean appendToList = true;
+        String query;
 
-        protected ArrayList<String[]> doInBackground(Void... params){
+        protected List<Document> doInBackground(String... queries){
             try {
                 if (android.os.Debug.isDebuggerConnected()) {
                     android.os.Debug.waitForDebugger();
                 }
-                String query = queryManager.constructPopularItemsQuery();
-                InputStream responseStream = queryManager.queryUrlForDataStream((String) query);
-                ArrayList<String[]> documentList = null;
+                query = queries[0];
+                String solrQuery = queryManager.constructSolrQuery(query, 0, AppConstants.resultsPerSuggestion);
+                InputStream responseStream = queryManager.queryUrlForDataStream((String) solrQuery);
+                List<Document> documentList = null;
                 try {
-                    //documentList = responseXMLParser.parseSearchResponse(responseStream);
-                    //String response = queryManager.readStringFromInputStream(responseStream);
-                    //Log.d(TAG, response);
-                    documentList = responseJSONParser.parsePopularData(responseStream);
+                    documentList = responseXMLParser.parseSearchResponse(responseStream);
                 } catch (java.io.IOException e){
                     // Add error dialogue
                     e.printStackTrace();
-                }/* catch (XmlPullParserException e){
+                } catch (XmlPullParserException e){
                     // Add error dialogue
                     e.printStackTrace();
-                }*/
+                }
+                SQLiteDatabase db = mDbHelper.getReadableDatabase();
+                String query = "SELECT pid, folderNumber, title, genre FROM bookmark";
+                Cursor c = db.rawQuery(query, null);
+
+                int indexPid = c.getColumnIndex(DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_PID);
+                int indexFolder = c.getColumnIndex(DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_FOLDER_NUMBER);
+                int indexTitle = c.getColumnIndex(DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_TITLE);
+                int indexGenre = c.getColumnIndex(DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_GENRE);
+
+                while (c.moveToNext()){
+                    String pid = c.getString(indexPid);
+                    String folder = c.getString(indexFolder);
+                    String title = c.getString(indexTitle);
+                    String genre = c.getString(indexGenre);
+                    documentList.add(new Document(pid, folder, title, genre));
+                }
+
+                c.close();
                 // Assign the retrieved documents to the documentsRetrieved List
                 return documentList;
             } catch (RuntimeException e){
@@ -87,20 +180,18 @@ public class PopularFragment extends Fragment {
             }
         }
 
-        protected void onPreExecute(){
+        protected void onPreExecute() {
+            //Turn Progress indicator off
             mProgressBar.setVisibility(View.VISIBLE);
         }
 
-        protected void onPostExecute (ArrayList<String[]> result) {
+        protected void onPostExecute (List<Document> result) {
             // if result retrieved
             if (result != null) {
-               //Do stuff
-                GetMetadataForPopularDocuments getMetadataForPopularDocuments = new GetMetadataForPopularDocuments();
-                getMetadataForPopularDocuments.execute(result);
+                setListToRetrievedDocuments(result, this.appendToList);
             }
             // if no result retrieved
             else {
-                mProgressBar.setVisibility(View.INVISIBLE);
                 builder.setMessage(R.string.network_error_message)
                         .setTitle(R.string.network_error_title);
                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -111,63 +202,15 @@ public class PopularFragment extends Fragment {
                 final AlertDialog networkErrorDialog = builder.create();
                 networkErrorDialog.show();
             }
-        }
-    }
-
-    private class GetMetadataForPopularDocuments extends AsyncTask<List<String []>, Void, List<Document>>{
-
-        List<String[]> objects;
-
-        protected List<Document> doInBackground(List<String[]>... params){
-            if (android.os.Debug.isDebuggerConnected()) {
-                android.os.Debug.waitForDebugger();
-            }
-
-            objects = params[0];
-
-            List<Document> result = new ArrayList<Document>();
-
-            for(String [] object : params[0]){
-                String query = queryManager.constructDocMetadataQuery(object[0]);
-                InputStream responseStream = queryManager.queryUrlForDataStream((String) query);
-                String [] documentMedata = {"", ""};
-                try {
-                    documentMedata = responseJSONParser.getPopularItemMetadata(responseStream);
-                }catch (java.io.IOException e){
-                    return null;
-                }
-                Document doc = new Document(object[0], object[1], documentMedata[0], documentMedata[1]);
-                result.add(doc);
-            }
-            return result;
-        }
-
-        protected void onPostExecute(List<Document> documents){
-            if(documents != null){
-                setListToRetrievedDocuments(documents, false);
-            }
             mProgressBar.setVisibility(View.INVISIBLE);
         }
-
     }
 
     private void setListToRetrievedDocuments(List<Document> documentsRetrieved, boolean appendToList) {
-        // if this is the first search
-        if (documentsRetrieved.size() == 0 && adapter != null){
-            adapter.clear();
-            adapter.notifyDataSetChanged();
-        }
-        // If this is a call to append to the list and the queryId is the same as when we sent the request, we append the
-        // data to the list
-        else if(appendToList == true){
-            //Log.d(TAG, "Will append to the list");
+        if(documentsRetrieved.size() != 0 && appendToList == true){
             this.documentsRetrieved.addAll(documentsRetrieved);
             adapter.notifyDataSetChanged();
-        }
-        else if(documentsRetrieved.size() != 0) {
-            this.documentsRetrieved = documentsRetrieved;
-            adapter = new SearchResultsAdapter(getContext(), documentsRetrieved, R.layout.item_grid_element, 1, AppConstants.backgroundDark);
-            mGridView.setAdapter(adapter);
+            mGridView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -176,4 +219,5 @@ public class PopularFragment extends Fragment {
         documentViewIntent.putExtra(AppConstants.documentTransferString, documentsRetrieved.get(listPosition).toArray());
         startActivity(documentViewIntent);
     }
+
 }

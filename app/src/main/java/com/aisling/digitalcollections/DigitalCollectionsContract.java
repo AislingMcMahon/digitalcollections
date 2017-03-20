@@ -27,23 +27,6 @@ public final class DigitalCollectionsContract {
     private static final String FOREIGN_KEY_CONSTRAINT = " FOREIGN KEY";
     private static final String REFERENCES = " REFERENCES ";
 
-    // Inner class that defines the query table inner contents
-    public static abstract class CollectionQuery implements BaseColumns {
-        // Table and Column names
-        public static final String TABLE_NAME = "query";
-        public static final String COLUMN_NAME_TEXT = "text";
-        public static final String COLUMN_NAME_TIME = "time";
-    }
-
-    // SQL commands for query table
-    public static final String SQL_CREATE_QUERIES =
-                CREATE_TABLE + CollectionQuery.TABLE_NAME + OPENING_PAREN +
-                CollectionQuery._ID + INTEGER_TYPE + PRIMARY_KEY_CONSTRAINT + COMMA_SEP +
-                CollectionQuery.COLUMN_NAME_TEXT + TEXT_TYPE + COMMA_SEP +
-                CollectionQuery.COLUMN_NAME_TIME + DATETIME_TYPE + DEFAULT + CURRENT_TIMESTAMP + CLOSING_PAREN;
-
-    public static final String SQL_DELETE_QUERIES =
-            DROP_TABLE + CollectionQuery.TABLE_NAME;
 
     // Inner class that defines the query table inner contents
     public static abstract class CollectionBookmark implements BaseColumns {
@@ -89,12 +72,13 @@ public final class DigitalCollectionsContract {
     public static abstract class CollectionFolders implements BaseColumns{
         public static final String TABLE_NAME = "folders";
         public static final String COLUMN_NAME_FOLDER_NAME = "folder_name";
+        public static final String COLUMN_NAME_FOLDER_ID = "folder_id";
         public static final String COLUMN_NAME_USER_ID = "user_id";
     }
 
     public static final String SQL_CREATE_FOLDERS =
             CREATE_TABLE + CollectionFolders.TABLE_NAME + OPENING_PAREN +
-            CollectionFolders._ID + INTEGER_TYPE + PRIMARY_KEY_CONSTRAINT + COMMA_SEP +
+            CollectionFolders.COLUMN_NAME_FOLDER_ID + INTEGER_TYPE + PRIMARY_KEY_CONSTRAINT + COMMA_SEP +
             CollectionFolders.COLUMN_NAME_FOLDER_NAME + TEXT_TYPE + COMMA_SEP +
             CollectionFolders.COLUMN_NAME_USER_ID + TEXT_TYPE + COMMA_SEP +
                     FOREIGN_KEY_CONSTRAINT + OPENING_PAREN + CollectionFolders.COLUMN_NAME_USER_ID + CLOSING_PAREN +
@@ -112,15 +96,37 @@ public final class DigitalCollectionsContract {
     public static final String SQL_CREATE_CONTAINS =
             CREATE_TABLE + CollectionContains.TABLE_NAME + OPENING_PAREN +
             CollectionContains.COLUMN_NAME_DOC_ID + INTEGER_TYPE + COMMA_SEP+
-            CollectionContains.COLUMN_NAME_FOLDER_ID + TEXT_TYPE + COMMA_SEP +
+            CollectionContains.COLUMN_NAME_FOLDER_ID + INTEGER_TYPE + COMMA_SEP +
             FOREIGN_KEY_CONSTRAINT + OPENING_PAREN + CollectionContains.COLUMN_NAME_DOC_ID + CLOSING_PAREN +
                     REFERENCES + CollectionBookmark.TABLE_NAME + OPENING_PAREN + CollectionBookmark._ID + CLOSING_PAREN + COMMA_SEP+
             FOREIGN_KEY_CONSTRAINT + OPENING_PAREN + CollectionContains.COLUMN_NAME_FOLDER_ID + CLOSING_PAREN +
                     REFERENCES + CollectionFolders.TABLE_NAME + OPENING_PAREN + CollectionFolders.COLUMN_NAME_FOLDER_NAME + CLOSING_PAREN + COMMA_SEP +
-                    PRIMARY_KEY_CONSTRAINT + OPENING_PAREN + CollectionContains.COLUMN_NAME_FOLDER_ID + COMMA_SEP + CollectionContains.COLUMN_NAME_DOC_ID + CLOSING_PAREN
+                    PRIMARY_KEY_CONSTRAINT + OPENING_PAREN + CollectionFolders.COLUMN_NAME_FOLDER_ID + COMMA_SEP + CollectionContains.COLUMN_NAME_DOC_ID + CLOSING_PAREN
                     + CLOSING_PAREN;
 
     public static final String SQL_DELETE_CONTAINS =
             DROP_TABLE + CollectionContains.TABLE_NAME;
+
+    // Inner class that defines the query table inner contents
+    public static abstract class CollectionQuery implements BaseColumns {
+        // Table and Column names
+        public static final String TABLE_NAME = "query";
+        public static final String COLUMN_NAME_TEXT = "text";
+        public static final String COLUMN_NAME_TIME = "time";
+        public static final String COLUMN_NAME_USER = "user_id";
+    }
+
+    // SQL commands for query table
+    public static final String SQL_CREATE_QUERIES =
+            CREATE_TABLE + CollectionQuery.TABLE_NAME + OPENING_PAREN +
+                    CollectionQuery._ID + INTEGER_TYPE + PRIMARY_KEY_CONSTRAINT + COMMA_SEP +
+                    CollectionQuery.COLUMN_NAME_TEXT + TEXT_TYPE + COMMA_SEP +
+                    CollectionQuery.COLUMN_NAME_TIME + DATETIME_TYPE + DEFAULT + CURRENT_TIMESTAMP + COMMA_SEP +
+                    CollectionQuery.COLUMN_NAME_USER + TEXT_TYPE + COMMA_SEP+
+                    FOREIGN_KEY_CONSTRAINT + OPENING_PAREN + CollectionQuery.COLUMN_NAME_USER + CLOSING_PAREN +
+                        REFERENCES + CollectionUsers.TABLE_NAME + OPENING_PAREN + CollectionUsers.COLUMN_NAME_EMAIL + CLOSING_PAREN+ CLOSING_PAREN;
+
+    public static final String SQL_DELETE_QUERIES =
+            DROP_TABLE + CollectionQuery.TABLE_NAME;
 
 }

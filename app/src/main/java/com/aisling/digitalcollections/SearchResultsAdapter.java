@@ -2,6 +2,8 @@ package com.aisling.digitalcollections;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,12 +47,12 @@ public class SearchResultsAdapter extends ArrayAdapter<Document> {
         }
         //assign imageView early to prevent scrolling effect
         ImageView mImageView = (ImageView) convertView.findViewById(R.id.imageView);
-        mImageView.setImageResource(R.drawable.background_place_holder_image_dark);
+        mImageView.setImageResource(R.drawable.background);
         if (mBackground == AppConstants.backGroundLight) {
             mImageView.setImageBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.background_place_holder_image_light));
         }
         else if (mBackground == AppConstants.backgroundDark){
-            mImageView.setImageBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.background_place_holder_image_dark));
+            mImageView.setImageBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.background));
         }
         //Unique tag is added to each image to be checked again when adding the image in the thumbnail request
         mImageView.setTag(String.valueOf(position));
@@ -58,8 +60,13 @@ public class SearchResultsAdapter extends ArrayAdapter<Document> {
         TextView mTitle = (TextView) convertView.findViewById(R.id.titleTextView);
         TextView mSubText = (TextView) convertView.findViewById(R.id.subTextView);
         // Populate the data into the template view using the data object
+        Typeface font = Typeface.createFromAsset(getContext().getAssets(),"OpenSans-Light.ttf");
         mTitle.setText(capitalize(document.getText()));
+        mTitle.setTextColor(Color.WHITE);
+        mTitle.setTypeface(font);
         mSubText.setText(capitalize(document.getGenre()));
+        mSubText.setTextColor(Color.WHITE);
+        mSubText.setTypeface(font);
         // Get thumbnail image from url
         GetThumbnailImage getThumbnailImage = new GetThumbnailImage();
         getThumbnailImage.updateInfoSyncTask(document.getPid(), mImageView, mQueryManager, mImageSize, (String) mImageView.getTag()); // get small thumbnail

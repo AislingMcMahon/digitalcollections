@@ -47,7 +47,8 @@ public class QueryManager {
     }
 
     public String constructPopularItemsQuery(){
-        String query = "http://46.101.47.238/";
+        String freeQuery = "1916";
+        String query = constructSolrQuery(freeQuery, 0, AppConstants.resultsPerSearchPage);
         return query;
     }
 

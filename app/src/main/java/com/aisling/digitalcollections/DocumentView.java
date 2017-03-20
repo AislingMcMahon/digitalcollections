@@ -53,7 +53,9 @@ public class DocumentView extends AppCompatActivity {
     private TextView mSeekBarTextView;
     private int currentPageIndex;
     boolean navBarVisible = true;
-    private User u = WelcomeActivity.u;
+    public User u = WelcomeActivity.u;
+    //public ArrayList<Boolean> selectedFolders = new ArrayList<>();
+    public ArrayList<Integer> mSelectedItems = new ArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -472,7 +474,6 @@ public class DocumentView extends AppCompatActivity {
                 startDetailViewActivity();
                 return true;
             case R.id.action_bookmark:
-                final ArrayList<Integer> mSelectedItems = new ArrayList();
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(DocumentView.this);
                 LayoutInflater inflater = DocumentView.this.getLayoutInflater();
                 builder.setView(inflater.inflate(R.layout.collection_dialog,null));
@@ -489,19 +490,16 @@ public class DocumentView extends AppCompatActivity {
                             })
                             .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener(){
                                 public void onClick(DialogInterface dialog,int id){
-                                    clear(u.selectedFolders);
-                                    for(int i:mSelectedItems)
-                                    {
-                                        u.selectedFolders[i] = true;
-                                    }
-                                    BookmarkDocTask bookmarkDocTask = new BookmarkDocTask();
-                                    bookmarkDocTask.execute();
+                                    addToFolders();
+                                    //BookmarkDocTask bookmarkDocTask = new BookmarkDocTask();
+                                    //bookmarkDocTask.execute();
+                                    mSelectedItems.clear();
                                 }
                             })
                             .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     // User cancelled the dialog
-                                    clear(u.selectedFolders);
+                                    u.clearSelection();
 
 
                                 }
@@ -514,7 +512,7 @@ public class DocumentView extends AppCompatActivity {
                             .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     // User cancelled the dialog
-                                    clear(u.selectedFolders);
+                                    u.clearSelection();
 
 
                                 }
@@ -538,10 +536,11 @@ public class DocumentView extends AppCompatActivity {
                                 String folderName = edit.getText().toString();
                                 Folder newFolder = new Folder(folderName);
                                 u.addToCollection(newFolder);
-                                u.selectedFolders[u.folders.size()-1] = true;
                                 addFolderToDatabase(newFolder);
-                                BookmarkDocTask bookmarkDocTask = new BookmarkDocTask();
-                                bookmarkDocTask.execute();
+                                addToFolders();
+                                //BookmarkDocTask bookmarkDocTask = new BookmarkDocTask();
+                                //bookmarkDocTask.execute();
+                                mSelectedItems.clear();
                                 dialog.dismiss();
                             }
                         });
@@ -554,13 +553,31 @@ public class DocumentView extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void clear(boolean[] array)
+    /*public void set(int i)
     {
-        for(int i=0;i<array.length;i++)
+        boolean[] b = u.selectedFolders;
+        b[i] = true;
+        u.selectedFolders = b;
+    }*/
+
+
+
+    /*public void update()
+    {
+        if(selectedFolders.length==1)
         {
-            array[i] = false;
+            selectedFolders[0]=true;
         }
-    }
+        else{
+            boolean[] temp = new boolean[selectedFolders.length+1];
+            for(int i=0; i<selectedFolders.length;i++)
+            {
+                temp[i] = selectedFolders[i];
+            }
+            temp[temp.length-1] = true;
+            selectedFolders = temp;
+        }
+    }*/
 
     private void startDetailViewActivity(){
         if(documentMetadata != null) {
@@ -581,7 +598,7 @@ public class DocumentView extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean bookmarked){
             if(bookmarked){
-                Toast.makeText(DocumentView.this, "Bookmark Added!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DocumentView.this, "Document saved!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(DocumentView.this, "Document already in selected folders", Toast.LENGTH_SHORT).show();
             }
@@ -623,23 +640,15 @@ public class DocumentView extends AppCompatActivity {
 
     private boolean addToFolders()
     {
-        boolean result = false;
         ArrayList<Folder> folders = u.folders;
         String doc = docInfo[0];
-        for(int i=0;i<u.selectedFolders.length;i++)
-        {
-            if(u.selectedFolders[i])
-            {
-                Folder f = folders.get(i);
-                if(!f.contains(doc))
-                {
-                    f.addToFolder(doc);
-                    addToDatabase(doc,f);
-                    result = true;
-                }
-            }
+        for(int i: mSelectedItems){
+            Folder f = folders.get(i);
+            f.addToFolder(doc);
+            addToDatabase(doc,f);
         }
-        return result;
+        return true;
+
     }
 
     private void addToDatabase(String doc, Folder f)
@@ -657,7 +666,7 @@ public class DocumentView extends AppCompatActivity {
         else{
             ContentValues values = new ContentValues();
             values.put(DigitalCollectionsContract.CollectionContains.COLUMN_NAME_DOC_ID, doc);
-            values.put(DigitalCollectionsContract.CollectionContains.COLUMN_NAME_FOLDER_ID, f.getFolderName());
+            values.put(DigitalCollectionsContract.CollectionContains.COLUMN_NAME_FOLDER_ID, f.getId());
             db.insert(DigitalCollectionsContract.CollectionContains.TABLE_NAME,null,values);
         }
     }
@@ -687,6 +696,7 @@ public class DocumentView extends AppCompatActivity {
         ContentValues values = new ContentValues();
         values.put(DigitalCollectionsContract.CollectionFolders.COLUMN_NAME_FOLDER_NAME, f.getFolderName());
         values.put(DigitalCollectionsContract.CollectionFolders.COLUMN_NAME_USER_ID, u.getUserName());
+        values.put(DigitalCollectionsContract.CollectionFolders.COLUMN_NAME_FOLDER_ID, f.getId());
         db.insert(DigitalCollectionsContract.CollectionFolders.TABLE_NAME,null,values);
     }
 }

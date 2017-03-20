@@ -3,6 +3,7 @@ package com.aisling.digitalcollections;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -60,6 +61,10 @@ public class Register extends AppCompatActivity {
                 }
                 else
                 {
+                    if(userNameTaken(userName))
+                    {
+                        Toast.makeText(getApplicationContext(), "Username has already been used,", Toast.LENGTH_LONG).show();
+                    }
                     // Save the Data in Database
                     WelcomeActivity.u = new User(userName,password);
                     ContentValues values = new ContentValues();
@@ -72,6 +77,18 @@ public class Register extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public boolean userNameTaken(String s)
+    {
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        String query = "SELECT email FROM users WHERE email=?";
+        Cursor c = db.rawQuery(query, new String[]{s});
+
+        if(c.moveToNext()){
+            return true;
+        }
+        return false;
     }
     @Override
     protected void onDestroy() {

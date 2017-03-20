@@ -1,25 +1,31 @@
 package com.aisling.digitalcollections;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.List;
 
 
@@ -36,20 +42,24 @@ public class SearchActivity extends AppCompatActivity {
     private AlertDialog.Builder builder;
     private ProgressBar mProgressBar;
     private DigitalCollectionsDbHelper mDbHelper;
+    private User u = WelcomeActivity.u;
 
     private int currentQueryId = 0;
     private int currentResultsPage = 0;
     private int resultsPerPage = AppConstants.resultsPerSearchPage;
     private int searchResultsPaginateDistance = AppConstants.searchResultsPaginateDistance;
     private String lastQuery = "";
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        mContext = getApplicationContext();
         // Set up toolbar
         setUpToolbar();
+
         //Add alert dialogue builder
         builder = new AlertDialog.Builder(SearchActivity.this);
         // Add progress bar to XML views and then call to make visible
@@ -57,6 +67,7 @@ public class SearchActivity extends AppCompatActivity {
         mProgressBar.setVisibility(View.INVISIBLE);
         // Get search bar and set listener for searching
         mSearchBar = (SearchView) findViewById(R.id.searchView);
+        changeSearchViewTextColor(mSearchBar);
         mSearchBar.onActionViewExpanded();
         // Initialize Query constructor
         queryManager = new QueryManager();
@@ -99,6 +110,12 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 goToDocumentView(position);
+            }
+        });
+        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                //TODO
+                return true;
             }
         });
         // set the scroll listener
@@ -203,6 +220,7 @@ public class SearchActivity extends AppCompatActivity {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DigitalCollectionsContract.CollectionQuery.COLUMN_NAME_TEXT, query);
+        values.put(DigitalCollectionsContract.CollectionQuery.COLUMN_NAME_USER, u.getUserName());
         long newRowId = db.insert(DigitalCollectionsContract.CollectionQuery.TABLE_NAME, null, values);
         db.close();
     }
@@ -222,7 +240,7 @@ public class SearchActivity extends AppCompatActivity {
         }
         else if(documentsRetrieved.size() != 0) {
             this.documentsRetrieved = documentsRetrieved;
-            adapter = new SearchResultsAdapter(this, documentsRetrieved, R.layout.item_search_result, 0, AppConstants.backGroundLight);
+            adapter = new SearchResultsAdapter(this, documentsRetrieved, R.layout.item_search_result, 1, AppConstants.backgroundDark);
             mListView.setAdapter(adapter);
         }
     }
@@ -231,6 +249,16 @@ public class SearchActivity extends AppCompatActivity {
         // Set up Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.search_activity_title);
+        TextView title = null;
+        try {
+            Field f = toolbar.getClass().getDeclaredField("mTitleTextView");
+            f.setAccessible(true);
+            title = (TextView) f.get(toolbar);
+            Typeface font = Typeface.createFromAsset(mContext.getAssets(),"OpenSans-Light.ttf");
+            title.setTypeface(font);
+        } catch (NoSuchFieldException e) {
+        } catch (IllegalAccessException e) {
+        }
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -240,5 +268,23 @@ public class SearchActivity extends AppCompatActivity {
         documentViewIntent.putExtra(AppConstants.documentTransferString, documentsRetrieved.get(listPosition).toArray());
         startActivity(documentViewIntent);
     }
+
+    private void changeSearchViewTextColor(View view) {
+        if (view != null) {
+            if (view instanceof TextView) {
+                ((TextView) view).setTextColor(Color.WHITE);
+                Typeface font = Typeface.createFromAsset(mContext.getAssets(),"OpenSans-Light.ttf");
+                ((TextView) view).setTypeface(font);
+                return;
+            } else if (view instanceof ViewGroup) {
+                ViewGroup viewGroup = (ViewGroup) view;
+                for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                    changeSearchViewTextColor(viewGroup.getChildAt(i));
+                }
+            }
+        }
+    }
+
+
 
 }

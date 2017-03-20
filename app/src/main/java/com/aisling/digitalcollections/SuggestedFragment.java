@@ -33,6 +33,7 @@ public class SuggestedFragment extends Fragment {
     private TextView mTextView;
     private SearchResultsAdapter adapter;
     private List<Document> documentsRetrieved;
+    private User u = WelcomeActivity.u;
     private AlertDialog.Builder builder;
     private ResponseXMLParser responseXMLParser;
 
@@ -74,15 +75,15 @@ public class SuggestedFragment extends Fragment {
         return rootView;
     }
 
-    private List<String> getPreviousSearches() {
+    private List<String> getPreviousQueries() {
         SQLiteDatabase db;// Read out database
         db = mDbHelper.getReadableDatabase();
         String sortOrder = DigitalCollectionsContract.CollectionQuery.COLUMN_NAME_TIME + " DESC";
         Cursor c = db.query(
                 DigitalCollectionsContract.CollectionQuery.TABLE_NAME,  // The table to query
                 null,                                                   // The columns to return
-                null,                                                   // The columns for the WHERE clause
-                null,                                                   // The values for the WHERE clause
+                DigitalCollectionsContract.CollectionQuery.COLUMN_NAME_USER + "=?",  // The columns for the WHERE clause
+                new String[]{u.getUserName()},                                // The values for the WHERE clause
                 null,                                                   // don't group the rows
                 null,                                                   // don't filter by row groups
                 sortOrder                                               // The sort order
@@ -107,7 +108,7 @@ public class SuggestedFragment extends Fragment {
 
         @Override
         protected List<String> doInBackground(Void... params) {
-            return getPreviousSearches();
+            return getPreviousQueries();
         }
 
         @Override
@@ -154,6 +155,25 @@ public class SuggestedFragment extends Fragment {
                     // Add error dialogue
                     e.printStackTrace();
                 }
+                SQLiteDatabase db = mDbHelper.getReadableDatabase();
+                String query = "SELECT pid, folderNumber, title, genre FROM" +
+                        " bookmark, contains, folders WHERE document_id=pid AND folders.folder_id=contains.folder_id AND user_id=?;";
+                Cursor c = db.rawQuery(query, new String[]{u.getUserName()});
+
+                int indexPid = c.getColumnIndex(DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_PID);
+                int indexFolder = c.getColumnIndex(DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_FOLDER_NUMBER);
+                int indexTitle = c.getColumnIndex(DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_TITLE);
+                int indexGenre = c.getColumnIndex(DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_GENRE);
+
+                while (c.moveToNext()){
+                    String pid = c.getString(indexPid);
+                    String folder = c.getString(indexFolder);
+                    String title = c.getString(indexTitle);
+                    String genre = c.getString(indexGenre);
+                    documentList.add(new Document(pid, folder, title, genre));
+                }
+
+                c.close();
                 // Assign the retrieved documents to the documentsRetrieved List
                 return documentList;
             } catch (RuntimeException e){

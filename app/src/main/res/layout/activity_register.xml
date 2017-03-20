@@ -42,6 +42,9 @@
 
         <Button
             android:id="@+id/buttonCreateAccount"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:theme="@style/Colored.Buttons"
+            android:textColor="@android:color/white"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Create Account"

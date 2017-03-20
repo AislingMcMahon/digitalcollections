@@ -123,7 +123,7 @@ public class WelcomeActivity extends AppCompatActivity {
         for(Folder f : u.folders)
         {
             String query2 = "SELECT document_id FROM CONTAINS WHERE folder_id=?";
-            Cursor c2 = db.rawQuery(query2, new String[]{f.getFolderName()});
+            Cursor c2 = db.rawQuery(query2, new String[]{f.getId().toString()});
             if(c2.moveToFirst()){
                 do{
                     f.addToFolder(c2.getString(0));
@@ -132,8 +132,9 @@ public class WelcomeActivity extends AppCompatActivity {
             c2.close();
         }
 
-        //
-        u.selectedFolders = new boolean[u.folders.size()];
+
+
+
         db.close();
     }
 }

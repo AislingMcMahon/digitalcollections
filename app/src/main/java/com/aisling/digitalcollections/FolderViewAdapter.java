@@ -1,7 +1,7 @@
 package com.aisling.digitalcollections;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +34,7 @@ public class FolderViewAdapter extends ArrayAdapter<Folder> {
         mLayout = layout;
         mImageSize = imageSize;
         mBackground = background;
+
     }
 
     public View getView(int position, View convertView, ViewGroup parent)
@@ -44,25 +45,26 @@ public class FolderViewAdapter extends ArrayAdapter<Folder> {
             convertView = LayoutInflater.from(getContext()).inflate(mLayout,parent,false);
         }
         ImageView mImageView = (ImageView) convertView.findViewById(R.id.imageView);
-        mImageView.setImageResource(R.drawable.background_place_holder_image_dark);
-        if(mBackground==AppConstants.backGroundLight)
+        mImageView.setImageResource(folder.getFolderResource());
+        /*if(mBackground==AppConstants.backGroundLight)
         {
             mImageView.setImageBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.background_place_holder_image_light));
         }
         else if (mBackground == AppConstants.backGroundLight){
             mImageView.setImageBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.background_place_holder_image_dark));
-        }
+        }*/
         mImageView.setTag(String.valueOf(position));
         TextView mFolderName = (TextView) convertView.findViewById(R.id.titleTextView);
+        mFolderName.setTextColor(Color.WHITE);
         mFolderName.setText(capitalize(folder.getFolderName()));
 
         //Getting the image
-        if(!folder.isEmpty())
+        /*if(!folder.isEmpty())
         {
             GetThumbnailImage image = new GetThumbnailImage();
             image.updateInfoSyncTask(folder.getFirstElement(),mImageView,mQueryManager,mImageSize,(String) mImageView.getTag());
             image.execute();
-        }
+        }*/
 
 
         return convertView;

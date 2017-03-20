@@ -36,8 +36,11 @@
 
         <Button
             android:id="@+id/buttonSignIn"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:theme="@style/Colored.Buttons"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
             android:text="Sign In" />
 
     </LinearLayout>

@@ -11,6 +11,9 @@
         android:hint= "Add a folder" />
 
     <Button
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:theme="@style/Colored.Buttons"
+        android:textColor="@android:color/white"
         android:id="@+id/dialog_ok"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
     <item android:id="@+id/action_search" android:title="@string/action_search"
         android:orderInCategory="100" app:showAsAction="always" android:icon="@drawable/ic_search_white_24dp" />
-    <item android:id="@+id/action_bookmarks" android:title="@string/action_bookmarks"
+    <item android:id="@+id/action_bookmarks" android:title="Folders"
+        android:orderInCategory="100" app:showAsAction="always" android:icon="@drawable/foldersbutton" />
+    <item android:id="@+id/action_logout" android:title="Logout"
         android:orderInCategory="100" app:showAsAction="never" />
+
 </menu>

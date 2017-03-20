@@ -61,7 +61,7 @@
                 android:layout_alignParentStart="true"
                 android:paddingTop="15dp">
 
-                <TextView
+                <com.aisling.digitalcollections.CollectionsTextView
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -72,7 +72,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true" />
 
-                <TextView
+                <com.aisling.digitalcollections.CollectionsTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -94,7 +94,7 @@
                 android:layout_alignParentStart="true"
                 android:paddingTop="15dp">
 
-                <TextView
+                <com.aisling.digitalcollections.CollectionsTextView
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -105,7 +105,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true" />
 
-                <TextView
+                <com.aisling.digitalcollections.CollectionsTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -127,7 +127,7 @@
                 android:layout_alignParentStart="true"
                 android:paddingTop="15dp">
 
-                <TextView
+                <com.aisling.digitalcollections.CollectionsTextView
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -138,7 +138,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true" />
 
-                <TextView
+                <com.aisling.digitalcollections.CollectionsTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -160,7 +160,7 @@
                 android:layout_alignParentStart="true"
                 android:paddingTop="15dp">
 
-                <TextView
+                <com.aisling.digitalcollections.CollectionsTextView
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -171,7 +171,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true" />
 
-                <TextView
+                <com.aisling.digitalcollections.CollectionsTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -193,7 +193,7 @@
                 android:layout_alignParentStart="true"
                 android:paddingTop="15dp">
 
-                <TextView
+                <com.aisling.digitalcollections.CollectionsTextView
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -204,7 +204,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true" />
 
-                <TextView
+                <com.aisling.digitalcollections.CollectionsTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -226,7 +226,7 @@
                 android:layout_alignParentStart="true"
                 android:paddingTop="15dp">
 
-                <TextView
+                <com.aisling.digitalcollections.CollectionsTextView
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -237,7 +237,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true" />
 
-                <TextView
+                <com.aisling.digitalcollections.CollectionsTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -259,7 +259,7 @@
                 android:layout_alignParentStart="true"
                 android:paddingTop="15dp">
 
-                <TextView
+                <com.aisling.digitalcollections.CollectionsTextView
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -270,7 +270,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true" />
 
-                <TextView
+                <com.aisling.digitalcollections.CollectionsTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"

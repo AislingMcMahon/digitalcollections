@@ -11,7 +11,8 @@ public class User {
     private String userName;
     private String password;
     public ArrayList<Folder> folders = new ArrayList<>();
-    public boolean[] selectedFolders;
+    public ArrayList<String> queries = new ArrayList<>();
+    private boolean[] selectedFolders = new boolean[folders.size()];
     public boolean loggedIn;
     public ArrayList<String> folderNames = new ArrayList<>();
 
@@ -56,22 +57,32 @@ public class User {
 
     public void addToCollection(Folder f)
     {
-        if(!this.folders.isEmpty()){
-            this.folders.add(f);
-            boolean[] tempSelectedFolders = new boolean[this.folders.size()];
-            for(int i=0;i<selectedFolders.length;i++)
-            {
-                tempSelectedFolders[i] = selectedFolders[i];
-            }
-            tempSelectedFolders[tempSelectedFolders.length -1] = true;
-            selectedFolders = tempSelectedFolders;
-        }
-        else
+        this.folders.add(f);
+    }
+
+    public boolean[] setTrue(int i)
+    {
+        selectedFolders[i] = true;
+        boolean[] b = selectedFolders;
+        return b;
+    }
+
+    public boolean[] getSelectedFolders()
+    {
+        return selectedFolders;
+    }
+
+    public void clearSelection()
+    {
+        for(int i=0;i<selectedFolders.length;i++)
         {
-            this.folders.add(f);
-            selectedFolders = new boolean[1];
-            selectedFolders[0] = true;
+            selectedFolders[i] = false;
         }
+    }
+
+    public void addToQueries(String query)
+    {
+        this.queries.add(query);
     }
 
 

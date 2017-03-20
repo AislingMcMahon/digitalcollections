@@ -1,5 +1,6 @@
 package com.aisling.digitalcollections;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -41,6 +42,10 @@ public class DocumentDetailViewActivity extends AppCompatActivity {
     TextView mAbstractTextView;
     TextView mAccessConditionLabelTextView;
     TextView mAccessConditionTextView;
+    //Typeface bold = Typeface.createFromAsset(getAssets(),"OpenSans-Bold.ttf");
+
+
+    Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +56,11 @@ public class DocumentDetailViewActivity extends AppCompatActivity {
         // get document details data passed from documentView
         documentDetails = getIntent().getStringArrayListExtra(AppConstants.documentDetailTransferString);
 
+        mContext = getApplicationContext();
         // Initialize doc detail elements
         initializeDetailElements();
+
+
 
     }
 

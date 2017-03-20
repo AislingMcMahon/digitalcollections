@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "940433073479",
+    "project_id": "digital-collections-160218"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:940433073479:android:fe3d5f6c9f3e1a2a",
+        "android_client_info": {
+          "package_name": "com.aisling.digitalcollections"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "940433073479-pdibnrbga4tuddc6ic4n093i9rvth12r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aisling.digitalcollections",
+            "certificate_hash": "13e701854e3c64b43db4c232f6c753b766d25f0f"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYop1rwGQL-JwzfpoWMyF6qqgZwFGksFw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-94022143-1"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,53 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:style="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_welcome"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.aisling.digitalcollections.WelcomeActivity">
 
     <ImageView
-        android:padding="10dp"
-        android:background="@android:color/white"
+        android:background="@drawable/long_room"
         android:layout_width="match_parent"
-        android:layout_height="500px"
+        android:layout_height="match_parent"
         android:id="@+id/splashImageView"
-        android:src="@drawable/digital_collections_logo"
+        android:src="@drawable/aleologo"
         android:scaleType="fitCenter"
         android:layout_weight="0.19"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="23dp" />
+        android:layout_alignParentStart="true" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center_vertical"
-        android:weightSum="1"
-        android:layout_marginTop="229dp"
-        android:layout_alignTop="@+id/splashImageView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:gravity="center|bottom" >
+
+        <!--<Button
+            android:id="@+id/buttonNoLogIn"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:theme="@style/Colored.Buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_above="@+id/buttonSignIN"
+            android:text="Continue without log in"
+            android:textColor="@android:color/white"
+            android:onClick="continue"/>-->
 
         <Button
             android:id="@+id/buttonSignIN"
-            android:layout_width="fill_parent"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:theme="@style/Colored.Buttons"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sign In"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:text="Log In"
+            android:textColor="@android:color/white"
             android:onClick="signIn"/>
 
         <Button
             android:id="@+id/buttonSignUP"
-            android:layout_width="fill_parent"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:theme="@style/Colored.Buttons"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sign Up" />
+            android:layout_toLeftOf="@+id/buttonSignIN"
+            android:layout_alignParentBottom="true"
+            android:text="Register"
+            android:textColor="@android:color/white"
+            android:onClick="signUp"/>
 
-    </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

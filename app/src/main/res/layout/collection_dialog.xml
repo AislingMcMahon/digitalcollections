@@ -5,6 +5,9 @@
     android:layout_height="match_parent">
 
     <Button
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:theme="@style/Colored.Buttons"
+        android:textColor="@android:color/white"
         android:id="@+id/addButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

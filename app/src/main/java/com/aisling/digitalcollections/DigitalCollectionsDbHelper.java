@@ -31,25 +31,25 @@ public class DigitalCollectionsDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(DigitalCollectionsContract.SQL_CREATE_QUERIES);
         db.execSQL(DigitalCollectionsContract.SQL_CREATE_BOOKMARKS);
         db.execSQL(DigitalCollectionsContract.SQL_CREATE_USERS);
         db.execSQL(DigitalCollectionsContract.SQL_CREATE_FOLDERS);
         db.execSQL(DigitalCollectionsContract.SQL_CREATE_CONTAINS);
-        Log.d(TAG, DigitalCollectionsContract.SQL_CREATE_QUERIES);
+        db.execSQL(DigitalCollectionsContract.SQL_CREATE_QUERIES);
         Log.d(TAG, DigitalCollectionsContract.SQL_CREATE_BOOKMARKS);
         Log.d(TAG, DigitalCollectionsContract.SQL_CREATE_USERS);
         Log.d(TAG, DigitalCollectionsContract.SQL_CREATE_FOLDERS);
         Log.d(TAG, DigitalCollectionsContract.SQL_CREATE_CONTAINS);
+        Log.d(TAG, DigitalCollectionsContract.SQL_CREATE_QUERIES);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(DigitalCollectionsContract.SQL_DELETE_QUERIES);
         db.execSQL(DigitalCollectionsContract.SQL_DELETE_BOOKMARKS);
         db.execSQL(DigitalCollectionsContract.SQL_DELETE_USERS);
         db.execSQL(DigitalCollectionsContract.SQL_DELETE_FOLDERS);
         db.execSQL(DigitalCollectionsContract.SQL_DELETE_CONTAINS);
+        db.execSQL(DigitalCollectionsContract.SQL_DELETE_QUERIES);
         onCreate(db);
     }
 

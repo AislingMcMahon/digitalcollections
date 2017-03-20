@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "digital-collections-160218",
+  "private_key_id": "2648f750df41bb5939e00b075d5a36bc6e3e9092",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDLS1JbvY9m0xaF\neivoiluPnVI8t3/UcrrTEq3H5NZi7IEB7OK8AXk9k+lXI2CCFtA7jJjd9GW85+pv\nQ6gkacyT32nxxAG0Xr+BGUqRXiUkW37rTGVt8NybVx1gxaG2mMQ3BebVaTVBZ/2F\nmtXsXvJfIhvFiZA8BApxIQ0xmhc15x3oV6SHWDsOztY79bgdtn+RZO7o4CeJ1911\nvfRzFbcVq9UHek74mDj0RuDi3YVUKX1d8uRY+Y9wfCdOzL0c9qQhgaxodsKVLr/3\nBOqYNqnckecMA+N4jow4wa9sdx3BZa2FKCint9JBkWpfTlH4ZoVZbHWnEEGdGFTp\nK0zI8m+hAgMBAAECggEAf7Yi2BU+yDbl2BaHDQAWQyNu7UvN11X3/e+nEoO1FtJC\nvUXmrnsygjewiBhmYXMZf790rUMCwujiwuE6+R0p8t+Qe9xJwdkf72dHDAmbxbph\nAkqtEaMVw9S3VPry+3X/Fh30BK+iUCOXBd7ecy62joMr9S3VWY6kTKuZ0UZfPHGE\nkWK+nmS1ocqjYiY3EArTS15NYy+6bGCb/yyLR9J8UO5IgKB+qyRYitnhX0rjrbb7\narh/OtWf/FW7YVbqx69G68OG6swOsIGeZcVLLnk39ynTM0KEwqqSglKNEbXVA77q\n0/Gb3GCuHpGpWhsT4+PYMwYqZrkjxGiZ+tf26pyiEQKBgQDykn38OCHBcbdObxlq\nQpd4/pV/DtE0b3hIYaEuDauQ0p/zQWDNUBV/Y8+EdPyiH8mC3ZGRRj7kpyh7D86o\nbupe/VY/4TOTnknbMGuOXOeskwznncs5B0N91N+vNBiixgYMHhyVu1jbBVNYPk0M\ncj7HDSdxxcPtCcjJOtWeVqMWbQKBgQDWjDfcErqDcoWjHfn5lqMePOSV89TG18XC\niIQAvLEG+HIaRu4EI2vQSJcSQQU5uucc4epv71ZfVn0qyAKDcWqJdTY7lbAzOGE9\nvwvQkkIVmnEEZe8+b26UEJFgUTkP95MmJQONz+7NjgKXGG1+z3XlfZgvHtpKLoo/\nPzhNkr1NhQKBgAuU1PEK2Qm8XS0gfs0k+shrF0YmtfRT8iE6kBB71JoohDx//Zgv\n36biZBEF6N3wuJVH8OBHw071cChX+9zs1sHMRKbuIKFGqG4PpML6SpFhv/b7AK3r\nW9yRIlDiIt76p2VCtsirVjW2zmDjMJiMh9THGwACmjUiB3UcGwDhUA4NAoGBAI31\n0bBIpCj9yfcYiqLfTadgW0/tOsknVK9XbSCfufMGyVkhvbP3TAtRPMTTSQXd6bZu\ntZTDJL+IluGL3j3i+b9iUzQx45jAoXcdxk+HtzpcKpPibt89FEncfJTiqYMrKa5/\np05aW4Sfho87lpfl5finld735zBWgxs+VZ7ejWuRAoGBAMJLXYEyqHW8TNvn70jZ\n+x+GCrbhr5S+2w26BvGBeZl06jKKVyzKDe0QpgcjVp507+LuuiENOBCmjCA3Rg3q\nfGwfqoXZu5n7WHtsqaqPhBGlQ3imjtIlB960jDXjp7zCxpzaVsFWpCMEbYjD6f5Z\njKbuC5ppU2MEBPsjPO5DDMQY\n-----END PRIVATE KEY-----\n",
+  "client_email": "aisling-mcmahon@digital-collections-160218.iam.gserviceaccount.com",
+  "client_id": "118048006394001990892",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/aisling-mcmahon%40digital-collections-160218.iam.gserviceaccount.com"
+}

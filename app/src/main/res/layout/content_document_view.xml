@@ -56,7 +56,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/linearLayout"
+        android:layout_above="@+id/relativeLayout"
         >
 
         <ImageView
@@ -108,7 +108,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
-        <TextView
+        <com.aisling.digitalcollections.CollectionsTextView
             android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -125,7 +125,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
 
-        <TextView
+        <com.aisling.digitalcollections.CollectionsTextView
             android:layout_width="65dp"
             android:layout_height="30dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
@@ -150,7 +150,7 @@
             android:layout_toEndOf="@id/seekBarTextView"
             android:background="@color/docViewNavBarElementColor"/>
 
-        <TextView
+        <com.aisling.digitalcollections.CollectionsTextView
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:textAppearance="?android:attr/textAppearanceMedium"

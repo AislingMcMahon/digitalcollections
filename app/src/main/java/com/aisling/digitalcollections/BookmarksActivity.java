@@ -34,7 +34,7 @@ public class BookmarksActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bookmarks);
         setUpToolbar();
-        bookmarks = new ArrayList<Document>();
+        bookmarks = new ArrayList<>();
         mListView = (ListView) findViewById(R.id.bookmarksListView);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,

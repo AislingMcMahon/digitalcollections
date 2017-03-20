@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#424242</color>
-    <color name="colorPrimaryDark">@android:color/black</color>
-    <color name="colorAccent">@android:color/holo_orange_dark</color>
+    <color name="colorPrimaryDark">#3a3a3a</color>
+    <color name="colorAccent">#3654db</color>
     <color name="docViewNavBarElementColor">#80000000</color>
-    <color name="gridElementBackground">#DDDDDD</color>
+    <color name="gridElementBackground">#424242</color>
     <color name="gridSubTitleColor">#777777</color>
+    <color name="buttonColor">#3654db</color>
 </resources>

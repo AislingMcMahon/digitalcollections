@@ -1,6 +1,8 @@
 package com.aisling.digitalcollections;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.TabLayout;
@@ -11,6 +13,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.TextView;
+
+import java.lang.reflect.Field;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,9 +45,22 @@ public class MainActivity extends AppCompatActivity {
             StrictMode.setThreadPolicy(policy);
         }
 
+        Context mContext = getApplicationContext();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //Change the font of the title
+        TextView title = null;
+        try {
+            Field f = toolbar.getClass().getDeclaredField("mTitleTextView");
+            f.setAccessible(true);
+            title = (TextView) f.get(toolbar);
+            Typeface font = Typeface.createFromAsset(mContext.getAssets(),"OpenSans-Light.ttf");
+            title.setTypeface(font);
+        } catch (NoSuchFieldException e) {
+        } catch (IllegalAccessException e) {
+        }
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), MainActivity.this);
@@ -78,6 +96,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_bookmarks:
                 startBookmarksActivity();
                 return true;
+            case R.id.action_logout:
+                startLogoutActivity();
+                WelcomeActivity.u.loggedIn = false;
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -91,6 +113,11 @@ public class MainActivity extends AppCompatActivity {
     public void startSearchActivity(){
         Intent searchIntent = new Intent(this, SearchActivity.class);
         startActivity(searchIntent);
+    }
+
+    public void startLogoutActivity(){
+        Intent logoutIntent = new Intent(this, WelcomeActivity.class);
+        startActivity(logoutIntent);
     }
 
 }
