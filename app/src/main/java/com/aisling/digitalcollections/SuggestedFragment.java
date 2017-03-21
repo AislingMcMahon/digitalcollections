@@ -92,12 +92,15 @@ public class SuggestedFragment extends Fragment {
 
         int retrievedQueries = 0;
         List<String> previousQueries = new ArrayList<String>();
-        while(c.moveToNext() && retrievedQueries < AppConstants.numberOfSearchesForSuggestions) {
-            String query =  c.getString(index);
-            if(!previousQueries.contains(query)){
-                previousQueries.add(query);
-                retrievedQueries ++;
-            }
+         if(c.moveToFirst()){
+            do{
+                String query =  c.getString(index);
+                if(!previousQueries.contains(query)){
+                    previousQueries.add(query);
+                    retrievedQueries ++;
+                }
+            }while(c.moveToNext());
+
         }
         c.close();
         db.close();

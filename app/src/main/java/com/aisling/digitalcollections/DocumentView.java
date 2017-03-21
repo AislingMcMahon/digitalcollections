@@ -537,6 +537,7 @@ public class DocumentView extends AppCompatActivity {
                                 Folder newFolder = new Folder(folderName);
                                 u.addToCollection(newFolder);
                                 addFolderToDatabase(newFolder);
+                                mSelectedItems.add(u.folders.size()-1);
                                 addToFolders();
                                 //BookmarkDocTask bookmarkDocTask = new BookmarkDocTask();
                                 //bookmarkDocTask.execute();
@@ -552,32 +553,6 @@ public class DocumentView extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    /*public void set(int i)
-    {
-        boolean[] b = u.selectedFolders;
-        b[i] = true;
-        u.selectedFolders = b;
-    }*/
-
-
-
-    /*public void update()
-    {
-        if(selectedFolders.length==1)
-        {
-            selectedFolders[0]=true;
-        }
-        else{
-            boolean[] temp = new boolean[selectedFolders.length+1];
-            for(int i=0; i<selectedFolders.length;i++)
-            {
-                temp[i] = selectedFolders[i];
-            }
-            temp[temp.length-1] = true;
-            selectedFolders = temp;
-        }
-    }*/
 
     private void startDetailViewActivity(){
         if(documentMetadata != null) {
@@ -647,6 +622,7 @@ public class DocumentView extends AppCompatActivity {
             f.addToFolder(doc);
             addToDatabase(doc,f);
         }
+        Toast.makeText(DocumentView.this, "Document saved!", Toast.LENGTH_SHORT).show();
         return true;
 
     }
@@ -661,14 +637,13 @@ public class DocumentView extends AppCompatActivity {
             values.put(DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_FOLDER_NUMBER, docInfo[1]);
             values.put(DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_TITLE, (String) documentMetadata.get(0));
             values.put(DigitalCollectionsContract.CollectionBookmark.COLUMN_NAME_GENRE, docInfo[3]);
-            long newRowId = db.insert(DigitalCollectionsContract.CollectionBookmark.TABLE_NAME, null, values);
+            db.insert(DigitalCollectionsContract.CollectionBookmark.TABLE_NAME, null, values);
         }
-        else{
-            ContentValues values = new ContentValues();
-            values.put(DigitalCollectionsContract.CollectionContains.COLUMN_NAME_DOC_ID, doc);
-            values.put(DigitalCollectionsContract.CollectionContains.COLUMN_NAME_FOLDER_ID, f.getId());
-            db.insert(DigitalCollectionsContract.CollectionContains.TABLE_NAME,null,values);
-        }
+        ContentValues values = new ContentValues();
+        values.put(DigitalCollectionsContract.CollectionContains.COLUMN_NAME_DOC_ID, doc);
+        values.put(DigitalCollectionsContract.CollectionContains.COLUMN_NAME_FOLDER_ID, f.getId());
+        db.insert(DigitalCollectionsContract.CollectionContains.TABLE_NAME,null,values);
+
     }
 
     private  boolean inBookmarks(String doc)
