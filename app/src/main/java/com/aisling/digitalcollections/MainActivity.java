@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.action_logout:
                 startLogoutActivity();
-                WelcomeActivity.u.loggedIn = false;
+                WelcomeActivity.u = null;
                 return true;
         }
 

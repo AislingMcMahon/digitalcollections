@@ -158,6 +158,7 @@ public class SuggestedFragment extends Fragment {
                     // Add error dialogue
                     e.printStackTrace();
                 }
+                //uses user bookmarks to create suggested documents
                 SQLiteDatabase db = mDbHelper.getReadableDatabase();
                 String query = "SELECT pid, folderNumber, title, genre FROM" +
                         " bookmark, contains, folders WHERE document_id=pid AND folders.folder_id=contains.folder_id AND user_id=?;";

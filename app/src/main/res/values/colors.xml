@@ -7,4 +7,5 @@
     <color name="gridElementBackground">#424242</color>
     <color name="gridSubTitleColor">#777777</color>
     <color name="buttonColor">#3654db</color>
+    <color name="text">#ffff</color>
 </resources>

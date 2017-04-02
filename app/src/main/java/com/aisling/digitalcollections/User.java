@@ -12,7 +12,6 @@ public class User {
     private String password;
     public ArrayList<Folder> folders = new ArrayList<>();
     public ArrayList<String> queries = new ArrayList<>();
-    private boolean[] selectedFolders = new boolean[folders.size()];
     public boolean loggedIn;
     public ArrayList<String> folderNames = new ArrayList<>();
 
@@ -60,30 +59,6 @@ public class User {
         this.folders.add(f);
     }
 
-    public boolean[] setTrue(int i)
-    {
-        selectedFolders[i] = true;
-        boolean[] b = selectedFolders;
-        return b;
-    }
-
-    public boolean[] getSelectedFolders()
-    {
-        return selectedFolders;
-    }
-
-    public void clearSelection()
-    {
-        for(int i=0;i<selectedFolders.length;i++)
-        {
-            selectedFolders[i] = false;
-        }
-    }
-
-    public void addToQueries(String query)
-    {
-        this.queries.add(query);
-    }
 
 
 }

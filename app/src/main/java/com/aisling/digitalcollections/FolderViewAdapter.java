@@ -58,7 +58,7 @@ public class FolderViewAdapter extends ArrayAdapter<Folder> {
         mFolderName.setTextColor(Color.WHITE);
         mFolderName.setText(capitalize(folder.getFolderName()));
 
-        //Getting the image
+        //Getting the image, using first item in the folder to be the thumbnail image
         /*if(!folder.isEmpty())
         {
             GetThumbnailImage image = new GetThumbnailImage();

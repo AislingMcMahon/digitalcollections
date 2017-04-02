@@ -250,6 +250,7 @@ public class SearchActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.search_activity_title);
         TextView title = null;
+        //change font of search bar as it is not covered in CollectionsTextView
         try {
             Field f = toolbar.getClass().getDeclaredField("mTitleTextView");
             f.setAccessible(true);

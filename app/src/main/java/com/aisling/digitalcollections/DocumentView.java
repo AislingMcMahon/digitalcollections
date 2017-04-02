@@ -499,7 +499,7 @@ public class DocumentView extends AppCompatActivity {
                             .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     // User cancelled the dialog
-                                    u.clearSelection();
+                                    mSelectedItems.clear();
 
 
                                 }
@@ -512,7 +512,7 @@ public class DocumentView extends AppCompatActivity {
                             .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     // User cancelled the dialog
-                                    u.clearSelection();
+                                    mSelectedItems.clear();
 
 
                                 }
@@ -672,6 +672,7 @@ public class DocumentView extends AppCompatActivity {
         values.put(DigitalCollectionsContract.CollectionFolders.COLUMN_NAME_FOLDER_NAME, f.getFolderName());
         values.put(DigitalCollectionsContract.CollectionFolders.COLUMN_NAME_USER_ID, u.getUserName());
         values.put(DigitalCollectionsContract.CollectionFolders.COLUMN_NAME_FOLDER_ID, f.getId());
+        values.put(DigitalCollectionsContract.CollectionFolders.COLUMN_NAME_FOLDER_COLOUR,R.drawable.folderblue);
         db.insert(DigitalCollectionsContract.CollectionFolders.TABLE_NAME,null,values);
     }
 }

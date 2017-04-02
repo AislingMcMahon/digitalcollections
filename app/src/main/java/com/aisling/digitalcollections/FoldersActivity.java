@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -74,8 +73,6 @@ public class FoldersActivity extends AppCompatActivity {
                                 return true;
                             case R.id.action_change_color:
                                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(FoldersActivity.this);
-                                final ArrayList<Integer> mSelectedItems= new ArrayList<>();
-                                LayoutInflater inflater = FoldersActivity.this.getLayoutInflater();
                                 builder.setTitle("Pick a colour")
                                         .setItems(R.array.colours, new DialogInterface.OnClickListener(){
                                             @Override
@@ -115,6 +112,7 @@ public class FoldersActivity extends AppCompatActivity {
                         Folder newFolder = new Folder(folderName);
                         u.addToCollection(newFolder);
                         addFolderToDatabase(newFolder);
+                        adapter.notifyDataSetChanged();
                         dialog.dismiss();
                     }
                 });
@@ -168,6 +166,15 @@ public class FoldersActivity extends AppCompatActivity {
     public void changeColour(int colour, int position)
     {
         mFolders.get(position).setFolderResource(colour);
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DigitalCollectionsContract.CollectionFolders.COLUMN_NAME_FOLDER_COLOUR,colour);
+        db.update(
+                DigitalCollectionsContract.CollectionFolders.TABLE_NAME,
+                values,
+                DigitalCollectionsContract.CollectionFolders.COLUMN_NAME_FOLDER_ID + " = ?",
+                new String[]{mFolders.get(position).getId().toString()}
+        );
     }
 
     private class GetFoldersTask extends AsyncTask<Void, Void, ArrayList<Folder>> {

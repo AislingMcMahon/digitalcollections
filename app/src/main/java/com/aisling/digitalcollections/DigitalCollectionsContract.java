@@ -73,6 +73,7 @@ public final class DigitalCollectionsContract {
         public static final String TABLE_NAME = "folders";
         public static final String COLUMN_NAME_FOLDER_NAME = "folder_name";
         public static final String COLUMN_NAME_FOLDER_ID = "folder_id";
+        public static final String COLUMN_NAME_FOLDER_COLOUR = "colour";
         public static final String COLUMN_NAME_USER_ID = "user_id";
     }
 
@@ -80,9 +81,11 @@ public final class DigitalCollectionsContract {
             CREATE_TABLE + CollectionFolders.TABLE_NAME + OPENING_PAREN +
             CollectionFolders.COLUMN_NAME_FOLDER_ID + INTEGER_TYPE + PRIMARY_KEY_CONSTRAINT + COMMA_SEP +
             CollectionFolders.COLUMN_NAME_FOLDER_NAME + TEXT_TYPE + COMMA_SEP +
+            CollectionFolders.COLUMN_NAME_FOLDER_COLOUR + INTEGER_TYPE + COMMA_SEP +
             CollectionFolders.COLUMN_NAME_USER_ID + TEXT_TYPE + COMMA_SEP +
                     FOREIGN_KEY_CONSTRAINT + OPENING_PAREN + CollectionFolders.COLUMN_NAME_USER_ID + CLOSING_PAREN +
-                    REFERENCES + CollectionUsers.TABLE_NAME + OPENING_PAREN + CollectionUsers.COLUMN_NAME_EMAIL + CLOSING_PAREN + CLOSING_PAREN;
+                    REFERENCES + CollectionUsers.TABLE_NAME + OPENING_PAREN + CollectionUsers.COLUMN_NAME_EMAIL +
+                    CLOSING_PAREN + CLOSING_PAREN;
 
     public static final String SQL_DELETE_FOLDERS =
             DROP_TABLE + CollectionFolders.TABLE_NAME;

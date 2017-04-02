@@ -88,6 +88,7 @@ public class Register extends AppCompatActivity {
         if(c.moveToNext()){
             return true;
         }
+        c.close();
         return false;
     }
     @Override

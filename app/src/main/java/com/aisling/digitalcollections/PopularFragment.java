@@ -22,6 +22,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+//has been changed from original application, as the original application connected to a server belonging to the previous developer
+//uses all queries made
 public class PopularFragment extends Fragment {
 
     private final String TAG = SuggestedFragment.class.getSimpleName();
